@@ -124,8 +124,8 @@ def process_log_file(cur, filepath):
         # get songid and artistid from song and artist tables
         print("song/artist/length:", (song, artist, length))
         cur.execute(song_select, (song, artist, length))
-        results = cur.fetchone()
-        
+        # results = cur.fetchone()
+        results = cur.fetchall()
         print(results)
 
         songid = ''
