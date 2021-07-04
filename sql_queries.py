@@ -8,16 +8,51 @@ time_table_drop = "DROP table IF EXISTS time_table"
 
 # CREATE TABLES
 
-songplay_table_create = ("CREATE TABLE IF NOT EXISTS songplay_table (start_time varchar, user_id varchar, level varchar, song_id varchar, artist_id varchar, session_id bigint, location varchar, user_agent varchar);")
+songplay_table_create = ("""CREATE TABLE IF NOT EXISTS songplay_table(
+	songplay_id SERIAL CONSTRAINT songplay_pk PRIMARY KEY,
+	start_time TIMESTAMP REFERENCES time (start_time),
+	user_id INT REFERENCES users (user_id),
+	level VARCHAR NOT NULL,
+	song_id VARCHAR REFERENCES songs (song_id),
+	artist_id VARCHAR REFERENCES artists (artist_id),
+	session_id INT NOT NULL, 
+	location VARCHAR,
+	user_agent TEXT
+)""")
 
-user_table_create = ("CREATE TABLE IF NOT EXISTS user_table (user_id varchar, first_name varchar, last_name varchar, gender varchar, level varchar, UNIQUE(user_id));")
+user_table_create = ("""CREATE TABLE IF NOT EXISTS user_table(
+	user_id  INT CONSTRAINT users_pk PRIMARY KEY,
+	first_name  VARCHAR,
+	last_name  VARCHAR,
+	gender  CHAR(1),
+	level VARCHAR NOT NULL
+)""")
 
-song_table_create = ("CREATE TABLE IF NOT EXISTS song_table (song_id varchar, title varchar, artist_id varchar, year int, duration numeric, UNIQUE(song_id));")
+song_table_create = ("""CREATE TABLE  IF NOT EXISTS song_table(
+	song_id VARCHAR CONSTRAINT songs_pk PRIMARY KEY,
+	title  VARCHAR,
+	artist_id  VARCHAR REFERENCES artists (artist_id),
+	year INT CHECK (year >= 0),
+	duration FLOAT
+)""")
 
-artist_table_create = ("CREATE TABLE IF NOT EXISTS artist_table (artist_id varchar, name varchar, location varchar, latitude numeric, longitude numeric, UNIQUE(artist_id));")
+artist_table_create = ("""CREATE TABLE  IF NOT EXISTS artist_table(
+	artist_id VARCHAR CONSTRAINT artist_pk PRIMARY KEY,
+	name VARCHAR,
+	location VARCHAR,
+	latitude DECIMAL(9,6),
+	longitude DECIMAL(9,6)
+)""")
 
-time_table_create = ("CREATE TABLE IF NOT EXISTS time_table (start_time varchar, hour int, day int, week int, month int, year int, weekday int, UNIQUE(start_time));")
-
+time_table_create = ("""CREATE TABLE IF NOT EXISTS time_table(
+	start_time  TIMESTAMP CONSTRAINT time_pk PRIMARY KEY,
+	hour INT NOT NULL CHECK (hour >= 0),
+	day INT NOT NULL CHECK (day >= 0),
+	week INT NOT NULL CHECK (week >= 0),
+	month INT NOT NULL CHECK (month >= 0),
+	year INT NOT NULL CHECK (year >= 0),
+	weekday VARCHAR NOT NULL
+)""")
 
 
 # INSERT RECORDS
